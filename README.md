@@ -1,4 +1,2 @@
 # DesktopAI
-A desktop application using blazor and electron to allow interfacing with different AI models.
-
-Currently Support OPEN AI
+A desktop application using blazor and electron to allow interfacing with Open AI.
