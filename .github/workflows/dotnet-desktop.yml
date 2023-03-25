@@ -47,13 +47,12 @@ on:
 jobs:
 
   build:
-
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         configuration: [Release]
-
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+        os: [ubuntu-latest, macos-latest, windows-latest]
+  
 
     env:
       Solution_Name: src\Desktop.AI.App\Desktop.AI.App.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
@@ -100,8 +99,21 @@ jobs:
       working-directory: src\Desktop.AI.App\Desktop.AI.App
      
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
-    - name: Upload build artifacts
+    - name: Upload build artifacts Windows
       uses: actions/upload-artifact@v3
       with:
-        name: MSIX Package
-        path: src\Desktop.AI.App\Desktop.AI.App\bin\desktop
+        name: Windows Package
+        path: src\Desktop.AI.App\Desktop.AI.App\bin\desktop\Desktop.AI.App*.exe
+
+    - name: Upload build artifacts MacOS
+      uses: actions/upload-artifact@v3
+      with:
+        name: MacOS Package
+        path: src\Desktop.AI.App\Desktop.AI.App\bin\desktop\Desktop.AI.App*.dmg
+
+    - name: Upload build artifacts Linux
+      uses: actions/upload-artifact@v3
+      with:
+        name: Linux Package
+        path: src\Desktop.AI.App\Desktop.AI.App\bin\desktop\Desktop.AI.App*.tar.gz
+

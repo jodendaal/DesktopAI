@@ -3,7 +3,7 @@
   "splashscreen": {
     "imageFile": ""
   },
-  "name": "Desktop AI",
+  "name": "DesktopAI",
   "author": "TimDoesTech",
   "singleInstance": true,
   "environment": "Production",
