@@ -67,6 +67,12 @@ jobs:
         fetch-depth: 0
 
     # Install the .NET Core workload
+    - name: Install .NET Core 5 For Electron CLI
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 5.0.x
+        
+    # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v3
       with:
