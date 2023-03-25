@@ -89,12 +89,12 @@ jobs:
       run: dotnet electronize build /target win
       working-directory: src/Desktop.AI.App/Desktop.AI.App
 
-   - name: Build Electron MacOs
+    - name: Build Electron MacOs
       if: matrix.os == 'macos-latest'
       run: dotnet electronize build /target osx
       working-directory: src/Desktop.AI.App/Desktop.AI.App
 
-   - name: Build Electron Linux (ubuntu)
+    - name: Build Electron Linux (ubuntu)
       if: matrix.os == 'ubuntu-latest'
       run: dotnet electronize build /target linux
       working-directory: src/Desktop.AI.App/Desktop.AI.App
