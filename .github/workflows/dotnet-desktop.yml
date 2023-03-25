@@ -84,8 +84,12 @@ jobs:
     # Build
     - name: Build
       run: dotnet build src\Desktop.AI.App\Desktop.AI.App.sln --configuration Release 
+     
+    - name: Restore Electron Tools
+      run: dotnet tool restore
+      working-directory: src\Desktop.AI.App\Desktop.AI.App
       
-    - name: Build
+    - name: Build Electron Windows
       run: dotnet electronize build /target win
       working-directory: src\Desktop.AI.App\Desktop.AI.App
      
