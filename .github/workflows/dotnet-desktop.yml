@@ -55,9 +55,9 @@ jobs:
   
 
     env:
-      Solution_Name: src\Desktop.AI.App\Desktop.AI.App.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
-      Wap_Project_Directory: src\Desktop.AI.App\Desktop.AI.App    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
-      Wap_Project_Path: src\Desktop.AI.App\Desktop.AI.App\.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+      Solution_Name: src/Desktop.AI.App/Desktop.AI.App.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
+      Wap_Project_Directory: src/Desktop.AI.App/Desktop.AI.App    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
+      Wap_Project_Path: src/Desktop.AI.App/Desktop.AI.App.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
     steps:
     - name: Checkout
@@ -80,32 +80,32 @@ jobs:
 
     # Build
     - name: Build
-      run: dotnet build src\Desktop.AI.App\Desktop.AI.App.sln --configuration Release 
+      run: dotnet build src/Desktop.AI.App/Desktop.AI.App.sln --configuration Release 
      
     - name: Restore Electron Tools
       run: dotnet tool restore
-      working-directory: src\Desktop.AI.App\Desktop.AI.App
+      working-directory: src/Desktop.AI.App/Desktop.AI.App
       
     - name: Build Electron Windows
       run: dotnet electronize build /target win
-      working-directory: src\Desktop.AI.App\Desktop.AI.App
+      working-directory: src/Desktop.AI.App/Desktop.AI.App
      
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts Windows
       uses: actions/upload-artifact@v3
       with:
         name: Windows Package
-        path: src\Desktop.AI.App\Desktop.AI.App\bin\desktop\Desktop.AI.App*.exe
+        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/Desktop.AI.App*.exe
 
     - name: Upload build artifacts MacOS
       uses: actions/upload-artifact@v3
       with:
         name: MacOS Package
-        path: src\Desktop.AI.App\Desktop.AI.App\bin\desktop\Desktop.AI.App*.dmg
+        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/Desktop.AI.App*.dmg
 
     - name: Upload build artifacts Linux
       uses: actions/upload-artifact@v3
       with:
         name: Linux Package
-        path: src\Desktop.AI.App\Desktop.AI.App\bin\desktop\Desktop.AI.App*.tar.gz
+        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/Desktop.AI.App*.tar.gz
 
