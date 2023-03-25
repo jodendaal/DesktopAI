@@ -88,10 +88,11 @@ jobs:
 
     # Build
     - name: Build
-      run: dotnet build src/OpenAI.Net.sln --configuration Release 
+      run: dotnet build src\Desktop.AI.App\Desktop.AI.App.sln --configuration Release 
       
     - name: Build
       run: dotnet electronize build /target win
+      working-directory: src\Desktop.AI.App\Desktop.AI.App
      
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
