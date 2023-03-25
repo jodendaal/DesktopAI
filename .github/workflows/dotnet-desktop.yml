@@ -104,17 +104,17 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Windows Package
-        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/Desktop.AI.App*.exe
+        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/*.exe
 
     - name: Upload build artifacts MacOS
       uses: actions/upload-artifact@v3
       with:
         name: MacOS Package
-        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/Desktop.AI.App*.dmg
+        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/*.dmg
 
     - name: Upload build artifacts Linux
       uses: actions/upload-artifact@v3
       with:
         name: Linux Package
-        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/Desktop.AI.App*.tar.gz
+        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/linux/*.snap
 
