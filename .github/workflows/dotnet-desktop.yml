@@ -116,5 +116,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Linux Package
-        path: src/Desktop.AI.App/Desktop.AI.App/bin/desktop/*.*
+        path: src/Desktop.AI.App/Desktop.AI.App/bin/Desktop/*.*
 
