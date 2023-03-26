@@ -4,10 +4,18 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>a2a21dbf-704e-4015-b2b5-0c3298217f24</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ElectronNET.API" Version="13.5.1" />
+    <PackageReference Include="Markdig" Version="0.31.0" />
+    <PackageReference Include="MarkdigExtensions.SyntaxHighlighting" Version="1.0.3" />
+    <PackageReference Include="OpenAI.Net.Client" Version="1.0.20" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties electron_1manifest_1json__JsonSchema="https://blockprotocol.org/schemas/block-metadata.json" /></VisualStudio></ProjectExtensions>
