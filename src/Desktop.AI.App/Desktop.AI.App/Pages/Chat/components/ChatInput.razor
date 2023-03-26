@@ -1,0 +1,26 @@
+﻿@using Desktop.AI.App.Models;
+
+
+<EditForm Model="@SearchModel" OnValidSubmit="@OnGenerateTextCompletionSubmitted">
+   
+
+    <div class="input-group chat-input-group">
+        <InputText title="prompt" id="name" @bind-Value="SearchModel.SearchText" class="form-control chat-input shadow-none" />
+        
+
+        <button title="send" type="submit" class="chat-input-button" disabled="@IsBusy"> <i class="oi oi-location"></i></button>
+
+    </div>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public SearchModel SearchModel { get; set; }
+
+    [Parameter]
+    public EventCallback OnGenerateTextCompletionSubmitted { get; set; }
+
+    [Parameter]
+    public bool IsBusy { get; set; }
+}

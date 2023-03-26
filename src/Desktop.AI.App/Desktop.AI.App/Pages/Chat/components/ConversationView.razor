@@ -1,0 +1,29 @@
+﻿@using Desktop.AI.App.Models;
+@using Markdig;
+@using ColorCode.Styling;
+
+<div class="conversation-area">
+
+    @foreach (var result in Conversation.ConversationHistory)
+    {
+        <div class="conversation-item @(result.User == "AI" ? "ai-reply" : "")">
+            <div>
+                @((MarkupString)@RenderHtmlContent(@result.Message))
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public Conversation Conversation { get; set; }
+
+    private string RenderHtmlContent(string content) => Markdig.Markdown.ToHtml(
+       markdown: content,
+       pipeline: new MarkdownPipelineBuilder()
+       .UseAdvancedExtensions()
+       .UseSyntaxHighlighting(StyleDictionary.DefaultDark)
+       .Build()
+       );
+}

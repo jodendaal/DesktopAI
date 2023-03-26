@@ -1,6 +1,8 @@
 using ElectronNET.API;
 using ElectronNET.API.Entities;
 
+using OpenAI.Net;
+
 namespace Desktop.AI.App
 {
     public class Program
@@ -12,6 +14,11 @@ namespace Desktop.AI.App
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+
+            builder.Services.AddOpenAIServices(o =>
+            {
+                o.ApiKey = builder.Configuration["OpenAI:ApiKey"];
+            });
 
             builder.Services.AddElectron();
             builder.WebHost.UseElectron(args);
