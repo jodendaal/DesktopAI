@@ -6,7 +6,9 @@
 
     <div class="input-group chat-input-group">
         <InputText title="prompt" id="name" @bind-Value="SearchModel.SearchText" class="form-control chat-input shadow-none" />
-        
+
+
+        <button title="generate-image" type="button" @onclick="OnGenerateImageClicked" class="chat-input-button" disabled="@IsBusy"> <i class="oi oi-image"></i></button>
 
         <button title="send" type="submit" class="chat-input-button" disabled="@IsBusy"> <i class="oi oi-location"></i></button>
 
@@ -20,6 +22,9 @@
 
     [Parameter]
     public EventCallback OnGenerateTextCompletionSubmitted { get; set; }
+
+    [Parameter]
+    public EventCallback OnGenerateImageClicked { get; set; }
 
     [Parameter]
     public bool IsBusy { get; set; }

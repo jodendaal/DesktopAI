@@ -1,0 +1,22 @@
+﻿<button @onclick="OnClicked" class="collapse-button" title="@ButtonTitle context">
+    @if (IsOpen)
+    {
+        <i class="oi oi-chevron-left"></i>
+    }
+    else
+    {
+        <i class="oi oi-chevron-right"></i>
+    }
+</button>
+
+
+
+@code {
+    [Parameter]
+    public EventCallback OnClicked { get; set; }
+
+    [Parameter]
+    public bool IsOpen { get; set; }
+
+    public string ButtonTitle => IsOpen ? "hide" : "show";
+}
