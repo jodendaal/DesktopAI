@@ -1,4 +1,6 @@
-﻿namespace Desktop.AI.App.Models
+﻿using OpenAI.Net.Models.Responses;
+
+namespace Desktop.AI.App.Models
 {
     public class Conversation
     {
@@ -12,6 +14,16 @@
                 Message = message
             }
             );
+        }
+
+        public void AppendToCurrentItem(string message)
+        {
+            this.ConversationHistory[this.ConversationHistory.Count - 1].Message += message;
+        }
+
+        public string GetCurrentItemMessage()
+        {
+            return this.ConversationHistory[this.ConversationHistory.Count - 1].Message;
         }
     }
 

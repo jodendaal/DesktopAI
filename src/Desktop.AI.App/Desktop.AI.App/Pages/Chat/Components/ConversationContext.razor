@@ -1,0 +1,23 @@
+﻿@using Desktop.AI.App.Models;
+
+@if (IsVisible)
+{
+    <div class="converation-context">
+
+        <EditForm Model="@SearchModel" class="converation-context-form">
+            <h5>System</h5>
+            <InputTextArea title="system" @bind-Value="@SearchModel.SystemContext" class="system-area" />
+
+            <h5>Assistant</h5>
+            <InputTextArea title="assistant" @bind-Value="@SearchModel.AssistantContext" class="assistant-area" />
+        </EditForm>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public SearchModel SearchModel { get; set; }
+
+    [Parameter]
+    public bool IsVisible { get; set; } = true;
+}

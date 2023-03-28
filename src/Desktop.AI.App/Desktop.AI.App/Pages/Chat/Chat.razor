@@ -1,19 +1,21 @@
 ﻿@page "/"
 @using Desktop.AI.App.Models;
-@using Desktop.AI.App.Pages.Chat.components
+@using Desktop.AI.App.Pages.Chat.Components
 @using OpenAI.Net;
 @inject IOpenAIService OpenAIService
 
 <div class="chat-container">
    
+    <ConversationContext SearchModel="@SearchModel" IsVisible="@IsConverstionContextVisible"></ConversationContext>
 
     <div class="chat">
+        <CollapseButton IsOpen="@IsConverstionContextVisible" OnClicked="OnHideSidePanelClicked"></CollapseButton>
         <ConversationView Conversation="Conversation"></ConversationView>
-
+        
         <div class="input-area">
-
-            <ChatInput SearchModel="@SearchModel" OnGenerateTextCompletionSubmitted="Search" IsBusy="@IsBusy"></ChatInput>
-
+            <LoadingIndicator IsBusy="@IsBusy" StatusText="@StatusText"></LoadingIndicator>
+            <ErrorIndicator ErrorText="@ErrorText"></ErrorIndicator>
+            <ChatInput SearchModel="@SearchModel" OnGenerateTextCompletionSubmitted="Search" IsBusy="@IsBusy" OnGenerateImageClicked="GenerateImage" ></ChatInput>
         </div>
     </div>
 
@@ -21,8 +23,10 @@
 
 
 @code{
-
+    private bool IsConverstionContextVisible = true;
     private bool IsBusy = false;
+    private string StatusText = string.Empty;
+    private string ErrorText = string.Empty;
 
     SearchModel SearchModel = new SearchModel()
     {
@@ -31,6 +35,12 @@
             AssistantContext = ""
     };
     Conversation Conversation = new Conversation();
+
+    private void SetIsBusy(bool isBusy,string statusText = "")
+    {
+        this.IsBusy = isBusy;
+        this.StatusText = statusText;
+    }
 
 
     public async Task Search()
@@ -47,22 +57,56 @@
 
         Conversation.AddItem("AI", "");
 
-        await foreach (var result in OpenAIService.Chat.GetStream(messagesRequest, o =>
-           {
-               o.N = 1;
-               o.MaxTokens = 2048;
-           }))
+        SetIsBusy(true, "Generating text..");
+
+        try
         {
-            this.Conversation.ConversationHistory[this.Conversation.ConversationHistory.Count - 1].Message += result.Result!.Choices[0].Delta.Content;
-            StateHasChanged();
+            await foreach (var result in OpenAIService.Chat.GetStream(messagesRequest, o =>
+             {
+                 o.N = 1;
+                 o.MaxTokens = 2048;
+             }))
+            {
+                this.Conversation.AppendToCurrentItem(result.Result!.Choices[0].Delta.Content);
+                StateHasChanged();
+            }
+
+            SearchModel.AssistantContext += Conversation.GetCurrentItemMessage();
         }
+        catch(Exception ex)
+        {
+            this.ErrorText = "An error has occurred";
+        }
+        finally
+        {
+            SetIsBusy(false);
+        }
+     
 
-        SearchModel.AssistantContext += this.Conversation.ConversationHistory[this.Conversation.ConversationHistory.Count - 1];
-
-
+        
     }
 
 
+    public async Task GenerateImage()
+    {
+        SetIsBusy(true, "Generating Image");
 
+        var imageResponse = await OpenAIService.Images.Generate(SearchModel.SearchText, 1);
+        if (imageResponse.IsSuccess)
+        {
+            this.Conversation.AddItem("AI", $@"<img src=""{imageResponse?.Result?.Data[0].Url}"" alt=""drawing"" width=""400"" />");
+        }
+        else
+        {
+            this.ErrorText = imageResponse.ErrorResponse?.Error?.Message;
+        }
+        this.SetIsBusy(false);
+    }
+
+
+    private async Task OnHideSidePanelClicked()
+    {
+        this.IsConverstionContextVisible = !this.IsConverstionContextVisible;
+    }
 
 }
