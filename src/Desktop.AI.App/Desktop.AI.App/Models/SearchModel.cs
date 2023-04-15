@@ -2,8 +2,8 @@
 {
     public class SearchModel
     {
-        public string SearchText { get; set; }
-        public string SystemContext { get; set; }
-        public string AssistantContext { get; set; }
+        public string SearchText { get; set; } = string.Empty;
+        public string SystemContext { get; set; } = string.Empty;
+        public string AssistantContext { get; set; } = string.Empty;
     }
 }

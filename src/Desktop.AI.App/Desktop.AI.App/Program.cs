@@ -1,3 +1,4 @@
+using Desktop.AI.App.Interop.SpeechToText;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
 
@@ -19,6 +20,9 @@ namespace Desktop.AI.App
             {
                 o.ApiKey = builder.Configuration["OpenAI:ApiKey"];
             });
+
+            //Interop
+            builder.Services.AddTransient<ISpeechToText,SpeechToText>();
 
             builder.Services.AddElectron();
             builder.WebHost.UseElectron(args);

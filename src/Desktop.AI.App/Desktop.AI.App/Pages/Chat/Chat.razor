@@ -11,8 +11,20 @@
         
         <div class="input-area">
             <LoadingIndicator IsBusy="@_isBusy" StatusText="@_statusText"></LoadingIndicator>
+
             <ErrorIndicator ErrorText="@_errorText"></ErrorIndicator>
-            <ChatInput SearchModel="@_searchModel" OnGenerateTextCompletionSubmitted="Search" IsBusy="@_isBusy" OnGenerateImageClicked="GenerateImage" ></ChatInput>
+
+            <SpeechToTextDisplay IsRecording="@_isRecording"
+                                 Text="@_voiceRecordingPartial"
+                                 OnStopRecordingClicked="OnStopRecordingClicked" />
+
+            <ChatInput 
+                SearchModel="@_searchModel"
+                OnGenerateTextCompletionSubmitted="Search" 
+                IsBusy="@_isBusy"
+                OnGenerateImageClicked="GenerateImage"
+                OnRecordClicked="OnRecordClicked"
+                IsRecording="@_isRecording" />
         </div>
     </div>
 

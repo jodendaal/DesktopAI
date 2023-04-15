@@ -5,6 +5,12 @@
    
 
     <div class="input-group chat-input-group">
+
+        @if (!IsRecording)
+        {
+            <button title="record voice" type="button" @onclick="OnRecordClicked" class="chat-input-button" disabled="@IsBusy"> <i class="oi oi-microphone"></i></button>
+        }
+
         <InputText title="prompt" id="name" @bind-Value="SearchModel.SearchText" class="form-control chat-input shadow-none" />
 
 
@@ -18,13 +24,19 @@
 
 @code {
     [Parameter]
-    public SearchModel SearchModel { get; set; }
+    public SearchModel SearchModel { get; set; } = new();
 
     [Parameter]
     public EventCallback OnGenerateTextCompletionSubmitted { get; set; }
 
     [Parameter]
     public EventCallback OnGenerateImageClicked { get; set; }
+
+    [Parameter]
+    public EventCallback OnRecordClicked { get; set; }
+
+    [Parameter]
+    public bool IsRecording { get; set; }
 
     [Parameter]
     public bool IsBusy { get; set; }

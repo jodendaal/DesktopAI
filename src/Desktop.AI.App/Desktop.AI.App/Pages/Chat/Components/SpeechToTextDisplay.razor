@@ -1,0 +1,24 @@
+﻿@if (IsRecording)
+{
+    <div class="speech-to-text-area">
+        <div class="speech-to-text">@Text</div>
+
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+
+        <div>
+            <button title="stop recording" type="button" @onclick="OnStopRecordingClicked" class="stop-button"> <i class="oi oi-media-stop"></i></button>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public bool IsRecording { get; set; }
+
+    [Parameter]
+    public EventCallback OnStopRecordingClicked { get; set; }
+}

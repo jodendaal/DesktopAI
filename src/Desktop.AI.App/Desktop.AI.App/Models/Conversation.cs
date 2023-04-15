@@ -1,6 +1,4 @@
-﻿using OpenAI.Net.Models.Responses;
-
-namespace Desktop.AI.App.Models
+﻿namespace Desktop.AI.App.Models
 {
     public class Conversation
     {
@@ -8,28 +6,34 @@ namespace Desktop.AI.App.Models
 
         public void AddItem(string user,string message)
         {
-            ConversationHistory.Add(new ConversationItem()
-            {
-                User = user,
-                Message = message
-            }
-            );
+            ConversationHistory.Add(new ConversationItem(user,message));
         }
 
         public void AppendToCurrentItem(string message)
         {
-            this.ConversationHistory[this.ConversationHistory.Count - 1].Message += message;
+            ConversationHistory[ConversationHistory.Count - 1].AppendToMessage(message);
         }
 
         public string GetCurrentItemMessage()
         {
-            return this.ConversationHistory[this.ConversationHistory.Count - 1].Message;
+            return ConversationHistory[ConversationHistory.Count - 1].Message;
         }
     }
 
     public class ConversationItem
     {
-        public string User { get; set; }
-        public string Message { get; set; }
+        public ConversationItem(string user, string message)
+        {
+            User = user;
+            Message = message;
+        }
+
+        public string User { get; init; }
+        public string Message { get; private set; }
+
+        public void AppendToMessage(string message) 
+        {
+            this.Message += message;
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Desktop.AI.App.Models;
+﻿using Desktop.AI.App.Interop.SpeechToText;
+using Desktop.AI.App.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using OpenAI.Net;
 
 namespace Desktop.AI.App.Pages.Chat
@@ -7,8 +9,11 @@ namespace Desktop.AI.App.Pages.Chat
     public partial class Chat : ComponentBase
     {
         [Inject]
-        private IOpenAIService? OpenAIService { get; init; }
+        private IOpenAIService? OpenAIService { get; init; } 
 
+        [Inject]
+        private ISpeechToText? SpeechToText { get; init; } 
+        
 
         private bool _isConverstionContextVisible = true;
         private bool _isBusy = false;
@@ -21,7 +26,22 @@ namespace Desktop.AI.App.Pages.Chat
             AssistantContext = ""
         };
         readonly Conversation _conversation = new();
-      
+        private bool _isRecording = false;
+        private string _voiceRecordingPartial = string.Empty;
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await this.InitialiseSpeechToText();
+            }
+        }
+
+        private async Task InitialiseSpeechToText()
+        {
+              await SpeechToText!.Initialise();
+        }
+
         private async Task Search()
         {
             _conversation.AddItem("User", _searchModel.SearchText);
@@ -51,7 +71,7 @@ namespace Desktop.AI.App.Pages.Chat
 
                 _searchModel.AssistantContext += _conversation.GetCurrentItemMessage();
             }
-            catch (Exception ex)
+            catch
             {
                 _errorText = "An error has occurred";
             }
@@ -76,6 +96,36 @@ namespace Desktop.AI.App.Pages.Chat
                 _errorText = imageResponse?.ErrorResponse?.Error?.Message;
             }
             SetIsBusy(false);
+        }
+
+        private async Task OnRecordClicked()
+        {
+            _isRecording = true;
+            await SpeechToText!.Start((text) =>
+            {
+                OnVoiceTextReceived(text);
+            });
+        }
+
+        private async Task OnStopRecordingClicked()
+        {
+            _voiceRecordingPartial = string.Empty;
+            _isRecording = false;
+            await SpeechToText!.Stop();
+        }
+
+        private void OnVoiceTextReceived(string text)
+        {
+            if (!_isRecording)
+            {
+                _searchModel.SearchText = text;
+            }
+            else
+            {
+                _voiceRecordingPartial = text;
+            }
+
+            StateHasChanged();
         }
 
         private void SetIsBusy(bool isBusy, string statusText = "")

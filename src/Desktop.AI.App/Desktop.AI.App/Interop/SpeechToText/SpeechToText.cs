@@ -1,27 +1,31 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace Desktop.AI.App.Interop.SpeechToText
 {
-    public class SpeechToText : IAsyncDisposable
+    public class SpeechToText : ISpeechToText
     {
+        private readonly IJSRuntime _jsRuntime;
+
         private const string _modulePath = "./interop/SpeechToText.js";
-        private readonly IJSRuntime _jSRuntime;
-        private IJSObjectReference _module;
-        private IJSObjectReference _speechToText;
-        private Action<string> _onTextReceivedAction;
+
+        private IJSObjectReference _module = null!;
+        private IJSObjectReference _speechToText = null!;
+        private Action<string> _onTextReceivedAction = null!;
         DotNetObjectReference<SpeechToText> _dotNetObjectReference
         {
             get; set;
-        }
-        public SpeechToText(IJSRuntime jSRuntime)
+        } = null!;
+
+        public SpeechToText(IJSRuntime jsRuntime)
         {
-            _jSRuntime = jSRuntime;
-            _dotNetObjectReference = DotNetObjectReference.Create(this);
+            _jsRuntime = jsRuntime;
         }
 
         public async Task Initialise()
         {
-            _module = await _jSRuntime!.InvokeAsync<IJSObjectReference>("import", _modulePath);
+            _dotNetObjectReference = DotNetObjectReference.Create(this);
+            _module = await _jsRuntime!.InvokeAsync<IJSObjectReference>("import", _modulePath);
             _speechToText = await _module.InvokeAsync<IJSObjectReference>("createSpeechToText");
         }
 
@@ -39,10 +43,7 @@ namespace Desktop.AI.App.Interop.SpeechToText
         [JSInvokable]
         public void OnTextReceived(string text)
         {
-            if (_onTextReceivedAction != null)
-            {
-                _onTextReceivedAction(text);
-            }
+            _onTextReceivedAction?.Invoke(text);
         }
 
         public async ValueTask DisposeAsync()
@@ -57,10 +58,9 @@ namespace Desktop.AI.App.Interop.SpeechToText
                 await _speechToText.DisposeAsync();
             }
 
-            if (_dotNetObjectReference != null)
-            {
-                _dotNetObjectReference.Dispose();
-            }
+            _dotNetObjectReference?.Dispose();
+
+            GC.SuppressFinalize(this);
         }
     }
 }
