@@ -59,6 +59,56 @@ a, .btn-link {
     color: white;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "An error has occurred."
+}
+
+
+.voice-enabled {
+    --tw-text-opacity: 1;
+    color: rgba(172,172,190,var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgba(32,33,35,var(--tw-bg-opacity));
+    border: none;
+}
+
+
+.voice-enabled::after {
+    content: none;
+    display: none;
+}
+
+.voice-disabled::after {
+    content: none;
+    display: none;
+}
+
+.voice-disabled {
+    --tw-bg-opacity: 0.5;
+    background-color: rgba(68,70,84,var(--tw-bg-opacity));
+    border: none;
+    color: white;
+    width: 40px
+}
+
+.modal-content {
+    background-image: linear-gradient(180deg, rgb(52 53 65) 0%, #202123 70%);
+    color:white;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 5px;
+    
+}
+
+*::-webkit-scrollbar-track {
+    background-color: gray;
+}
+
+*::-webkit-scrollbar-thumb {
+    --tw-bg-opacity: 0.5;
+    background-color: rgba(32,33,35,var(--tw-bg-opacity));
+    border-radius: 20px;
+    border: 3px solid rgba(32,33,35,var(--tw-bg-opacity));
+}

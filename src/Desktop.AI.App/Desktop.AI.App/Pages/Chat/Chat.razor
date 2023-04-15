@@ -18,15 +18,26 @@
                                  Text="@_voiceRecordingPartial"
                                  OnStopRecordingClicked="OnStopRecordingClicked" />
 
+            <TextToSpeechDisplay IsSpeaking="@_isSpeaking"
+                                 OnStopClicked="OnStopSpeakingClicked" />
+
             <ChatInput 
                 SearchModel="@_searchModel"
                 OnGenerateTextCompletionSubmitted="Search" 
                 IsBusy="@_isBusy"
                 OnGenerateImageClicked="GenerateImage"
                 OnRecordClicked="OnRecordClicked"
-                IsRecording="@_isRecording" />
+                IsRecording="@_isRecording"
+                IsTextToSpeechEnabled="@_isTextToSpeechEnabled"
+                OnToggleTextToSpeechEnabledClicked="@OnTextToSpeechToggleClicked"
+                OSelectVoiceClicked="@OnSelectVoiceClicked"
+                />
         </div>
     </div>
 
 </div>
 
+<VoiceSelectionModal @ref="_voiceSelectionModal"
+                     OnVoiceSelected="OnVoiceSelected"
+                    >
+</VoiceSelectionModal>

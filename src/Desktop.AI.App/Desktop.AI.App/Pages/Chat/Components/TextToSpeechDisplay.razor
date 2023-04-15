@@ -1,0 +1,20 @@
+﻿@if (IsSpeaking)
+{
+    <div class="speech-to-text-area">
+
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+
+        <div>
+            <button title="stop speaking" type="button" @onclick="OnStopClicked" class="stop-button"> <i class="oi oi-media-stop"></i></button>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public bool IsSpeaking { get; set; }
+
+    [Parameter]
+    public EventCallback OnStopClicked { get; set; }
+}

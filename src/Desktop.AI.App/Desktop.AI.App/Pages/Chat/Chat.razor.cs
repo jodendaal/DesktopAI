@@ -1,7 +1,8 @@
 ﻿using Desktop.AI.App.Interop.SpeechToText;
+using Desktop.AI.App.Interop.TextToSpeech;
 using Desktop.AI.App.Models;
+using Desktop.AI.App.Pages.Chat.Components;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using OpenAI.Net;
 
 namespace Desktop.AI.App.Pages.Chat
@@ -12,8 +13,11 @@ namespace Desktop.AI.App.Pages.Chat
         private IOpenAIService? OpenAIService { get; init; } 
 
         [Inject]
-        private ISpeechToText? SpeechToText { get; init; } 
-        
+        private ISpeechToText? SpeechToText { get; init; }
+
+        [Inject]
+        private ITextToSpeech? TextToSpeech { get; init; }
+
 
         private bool _isConverstionContextVisible = true;
         private bool _isBusy = false;
@@ -28,18 +32,33 @@ namespace Desktop.AI.App.Pages.Chat
         readonly Conversation _conversation = new();
         private bool _isRecording = false;
         private string _voiceRecordingPartial = string.Empty;
+        //private List<Voice> _voices = new List<Voice>();
+        private CancellationTokenSource? _textToSpeechCancellationTokenSource;
+        private bool _isTextToSpeechEnabled { get; set; } = true;
+        private bool _isSpeaking { get; set; } = true;
+        private string _selectedVoiceUri = "";
+        private VoiceSelectionModal? _voiceSelectionModal;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
-                await this.InitialiseSpeechToText();
+               InitialiseSpeechToText();
+               InitialiseTextToSpeech();
             }
         }
 
-        private async Task InitialiseSpeechToText()
+        private async void InitialiseSpeechToText()
         {
               await SpeechToText!.Initialise();
+        }
+
+        private async void InitialiseTextToSpeech()
+        {
+            
+            await TextToSpeech!.Initialise();
+            //this._voices = await TextToSpeech.GetVoices();
+            StateHasChanged();
         }
 
         private async Task Search()
@@ -59,6 +78,8 @@ namespace Desktop.AI.App.Pages.Chat
 
             try
             {
+                _searchModel.SearchText = string.Empty;
+
                 await foreach (var result in OpenAIService!.Chat.GetStream(messagesRequest, o =>
                 {
                     o.N = 1;
@@ -66,6 +87,7 @@ namespace Desktop.AI.App.Pages.Chat
                 }))
                 {
                     _conversation.AppendToCurrentItem(result.Result!.Choices[0].Delta.Content);
+                   
                     StateHasChanged();
                 }
 
@@ -78,6 +100,7 @@ namespace Desktop.AI.App.Pages.Chat
             finally
             {
                 SetIsBusy(false);
+                Speak(_conversation.GetCurrentItemMessage());
             }
         }
 
@@ -97,6 +120,45 @@ namespace Desktop.AI.App.Pages.Chat
             }
             SetIsBusy(false);
         }
+
+        private async void Speak(string text)
+        {
+            if (this._isTextToSpeechEnabled)
+            {
+                _textToSpeechCancellationTokenSource = new CancellationTokenSource();
+                this._isSpeaking = true;
+                await TextToSpeech.Speak(text, this._selectedVoiceUri, _textToSpeechCancellationTokenSource.Token);
+                this._isSpeaking = false;
+                StateHasChanged();
+            }
+        }
+
+        private void OnSelectVoiceClicked()
+        {
+            _voiceSelectionModal?.ShowAsync();
+        }
+
+        private void OnVoiceSelected(Voice voice)
+        {
+            this._selectedVoiceUri = voice.VoiceURI;
+        }
+
+        private void OnTextToSpeechToggleClicked()
+        {
+            _isTextToSpeechEnabled = !_isTextToSpeechEnabled;
+        }
+
+        private async void OnStopSpeakingClicked()
+        {
+            if (this._isTextToSpeechEnabled)
+            {
+                await TextToSpeech!.Cancel();
+                this._isSpeaking = false;
+                _textToSpeechCancellationTokenSource?.Cancel();
+                StateHasChanged();
+            }
+        }
+
 
         private async Task OnRecordClicked()
         {

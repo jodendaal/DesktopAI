@@ -1,0 +1,121 @@
+﻿@using BlazorStrap.V5;
+@using Desktop.AI.App.Interop.TextToSpeech;
+@using Desktop.AI.App.Models;
+@inject IJSRuntime JSRuntime
+@inject ITextToSpeech TextToSpeechHelper;
+
+<BSModal IsCentered="true" Class="code-modal" @ref="ViewCodeModalRef" IsScrollable="true" Size="Size.Large">
+
+    <Header>
+        <div>
+            <div>
+                Choose Voice
+            </div>
+            <div>
+                <div class="input-group mb-3">
+                  
+                    <input placeholder="Search voice..." @bind=SearchText @bind:event="oninput" class="form-control search-input" />
+                </div>
+              
+            </div>
+        </div>
+       
+    </Header>
+    <Content>
+        <div>
+            <ul class="list-group">
+
+                @if (Voices.Count > 0)
+                {
+                    @foreach (var voice in GetVoices())
+                    {
+                        <li class="list-group-item voice-list-item">
+                            <div class="voice-list-item-content">
+                                <div>
+                                    @voice.Name (@voice.Lang)
+                                </div>
+                                <div>
+                                    <button title="test" @onclick="() => OnTestVoiceClicked(voice)">  <i class="oi oi-volume-high"></i></button>
+                                    <button title="select" @onclick="() => OnSelectVoiceClicked(voice)"><i class="oi oi-check"></i></button>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                }
+
+            </ul>
+
+        </div>
+    </Content>
+
+    <Footer Context="modal">
+        <button class="btn button" @onclick="OnCloseClicked">Close</button>
+    </Footer>
+
+</BSModal>
+
+@code {
+
+    [Parameter]
+    public EventCallback<Voice> OnVoiceSelected { get; set; }
+
+
+    public List<Voice> Voices { get; set; } = new List<Voice>();
+
+
+    public string SearchText { get; set; } = "English";
+
+
+
+    private BSModal? ViewCodeModalRef { get; set; }
+
+
+    private List<Voice> GetVoices()
+    {
+        return Voices.Where(i=> i.Name.Contains(SearchText,StringComparison.InvariantCultureIgnoreCase)).ToList();
+    }
+
+    public async void ShowAsync()
+    {
+        await TextToSpeechHelper.Initialise();
+        this.ViewCodeModalRef?.ShowAsync();
+        LoadVoices();
+    }
+
+    private void OnCloseClicked()
+    {
+        this.ViewCodeModalRef?.HideAsync();
+    }
+
+    private async void OnTestVoiceClicked(Voice voice)
+    {
+        await TextToSpeechHelper.Speak($"Hi, would you like me to be your screen reader voice?", voice.VoiceURI, CancellationToken.None);
+    }
+
+    private async void OnSelectVoiceClicked(Voice voice)
+    {
+        await OnVoiceSelected.InvokeAsync(voice);
+        OnCloseClicked();
+    }
+
+    private async void LoadVoices()
+    {
+        Voices = await TextToSpeechHelper.GetVoices();
+    }
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        this.InitialiseTextToSpeech();
+    //    }
+    //    await base.OnAfterRenderAsync(firstRender);
+    //}
+
+    //private async void InitialiseTextToSpeech()
+    //{
+       
+        
+    //    //StateHasChanged();
+    //}
+}

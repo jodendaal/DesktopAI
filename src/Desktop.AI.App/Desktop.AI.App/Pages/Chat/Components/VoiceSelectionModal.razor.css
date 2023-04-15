@@ -1,0 +1,45 @@
+﻿.voice-list-item-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.voice-list-item button {
+    background: none;
+    border: none;
+    color:white;
+}
+
+.voice-list-item button:hover {
+    --tw-bg-opacity: 0.5;
+    background: rgba(68,70,84,var(--tw-bg-opacity));
+    cursor:pointer;
+        
+}
+
+.voice-list-item {
+    background-color: rgba(52,53,65);
+    color: white;
+}
+
+.search-input {
+    --tw-bg-opacity: 0.5;
+    background-color: rgba(68,70,84,var(--tw-bg-opacity));
+    color: white;
+    border: none;
+    border-top-color: rgba(32, 33, 35, 0.5);
+    border-right-color: rgba(32, 33, 35, 0.5);
+    border-bottom-color: rgba(32, 33, 35, 0.5);
+    border-left-color: rgba(32, 33, 35, 0.5);
+    outline: none !important;
+}
+
+.search-input:focus {
+    --tw-bg-opacity: 0.5;
+    background-color: rgba(68,70,84,var(--tw-bg-opacity));
+    color: white;
+    border: none;
+    border-top-color: rgba(32, 33, 35, 0.5);
+    border-right-color: rgba(32, 33, 35, 0.5);
+    border-bottom-color: rgba(32, 33, 35, 0.5);
+    border-left-color: rgba(32, 33, 35, 0.5);
+}

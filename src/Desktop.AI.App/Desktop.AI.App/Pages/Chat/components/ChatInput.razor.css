@@ -44,3 +44,10 @@
     color: white;
     font-weight: bold;
 }
+
+.voice-enabled {
+    --tw-text-opacity: 1;
+    color: rgba(172,172,190,var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgba(32,33,35,var(--tw-bg-opacity));
+}

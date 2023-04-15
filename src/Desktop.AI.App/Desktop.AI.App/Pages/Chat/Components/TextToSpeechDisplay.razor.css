@@ -1,0 +1,70 @@
+﻿.speech-to-text-area {
+    background: #00000054;
+    border-radius: 30px;
+    margin: auto;
+}
+
+.speech-to-text-area .speech-to-text {
+    color: white;
+    font-size: 20px;
+}
+
+.lds-facebook {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.lds-facebook div {
+    display: inline-block;
+    position: absolute;
+    left: 8px;
+    width: 16px;
+    background: #fff;
+    animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.lds-facebook div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+}
+
+.lds-facebook div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+}
+
+.lds-facebook div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+}
+
+@keyframes lds-facebook {
+    0% {
+        top: 8px;
+        height: 64px;
+    }
+
+    50%, 100% {
+        top: 24px;
+        height: 32px;
+    }
+}
+
+.stop-button {
+    border-radius: 30%;
+    height --tw-bg-opacity: 0.5;
+    background-color: rgba(68,70,84,var(--tw-bg-opacity));
+    border: none;
+    color: white;
+    width: 43px;
+    height: 43px;
+}
+
+.stop-button:hover {
+    --tw-text-opacity: 1;
+    color: rgba(172,172,190,var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgba(32,33,35,var(--tw-bg-opacity));
+}

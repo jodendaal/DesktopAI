@@ -7,7 +7,7 @@ namespace Desktop.AI.App.Interop.SpeechToText
     {
         private readonly IJSRuntime _jsRuntime;
 
-        private const string _modulePath = "./interop/SpeechToText.js";
+        private const string _modulePath = "./interop/SpeechToText/SpeechToText.js";
 
         private IJSObjectReference _module = null!;
         private IJSObjectReference _speechToText = null!;

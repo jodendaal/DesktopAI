@@ -1,4 +1,6 @@
+using BlazorStrap;
 using Desktop.AI.App.Interop.SpeechToText;
+using Desktop.AI.App.Interop.TextToSpeech;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
 
@@ -12,6 +14,12 @@ namespace Desktop.AI.App
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+                o.MaximumReceiveMessageSize = long.MaxValue;
+            });
+
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
@@ -23,10 +31,12 @@ namespace Desktop.AI.App
 
             //Interop
             builder.Services.AddTransient<ISpeechToText,SpeechToText>();
+            builder.Services.AddTransient<ITextToSpeech, TextToSpeech>();
 
             builder.Services.AddElectron();
             builder.WebHost.UseElectron(args);
 
+            builder.Services.AddBlazorStrap();
 
             if (HybridSupport.IsElectronActive)
             {
