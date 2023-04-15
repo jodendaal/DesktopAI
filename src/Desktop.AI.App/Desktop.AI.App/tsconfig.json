@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": false,
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": false,
+    "target": "ES6",
+    "module": "ES2020",
+    "outDir": "wwwroot/interop"
+  },
+  "exclude": [
+   
+    "node_modules"
+  ]
+}
